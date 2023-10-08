@@ -1,0 +1,38 @@
+# if dcs_exists: false and dcs_type: "etcd"
+[etcd_cluster]  # recommendation: 3, or 5-7 nodes
+10.0.10.5
+10.0.10.6
+10.0.10.7
+
+# if dcs_exists: false and dcs_type: "consul"
+[consul_instances]  # recommendation: 3 or 5-7 nodes
+
+# if with_haproxy_load_balancing: true
+[balancers]
+10.0.10.2
+
+# PostgreSQL nodes
+[master]
+10.0.10.3 postgresql_exists=false
+
+[replica]
+10.0.10.4 postgresql_exists=false
+
+[postgres_cluster:children]
+master
+replica
+
+# if pgbackrest_install: true and "repo_host" is set
+[pgbackrest]  # optional (Dedicated Repository Host)
+
+
+# Connection settings
+[all:vars]
+ansible_connection='ssh'
+ansible_ssh_port='22'
+ansible_user='aleks'
+#ansible_ssh_private_key_file=
+#ansible_python_interpreter='/usr/bin/python3'  # is required for use python3
+
+[pgbackrest:vars]
+
